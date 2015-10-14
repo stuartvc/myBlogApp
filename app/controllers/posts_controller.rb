@@ -6,13 +6,13 @@ class PostsController < ApplicationController
   def index
     @posts = Post.all
 
-    render json: @posts
+    render json: @posts, each_serializer: PostPreviewSerializer
   end
 
   # GET /posts/1
   # GET /posts/1.json
   def show
-    render json: @post
+    render json: @post, serializer: PostSerializer
   end
 
   # POST /posts
