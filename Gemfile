@@ -7,8 +7,12 @@ gem 'rails-api'
 
 gem 'spring', :group => :development
 
-
-gem 'pg'
+group :development, :test do
+	gem 'sqlite3'
+end
+group :production do
+	gem 'pg'
+end
 
 gem 'tzinfo-data'
 gem 'active_model_serializers', '~> 0.8.3'
