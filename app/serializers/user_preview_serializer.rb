@@ -1,3 +1,3 @@
 class UserPreviewSerializer < ActiveModel::Serializer
-  attributes :id, :email
+  attributes :id, :name, :email
 end
