@@ -16,6 +16,8 @@ public abstract class MyFragment<T extends MyObject, LT extends MyList<T>> exten
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setRetainInstance(true);
+
         mAdapter = createAdapter();
         mLoader = createLoader();
 

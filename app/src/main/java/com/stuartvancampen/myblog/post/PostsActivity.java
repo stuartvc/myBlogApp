@@ -26,11 +26,17 @@ public class PostsActivity extends MyActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
-    protected Fragment constructFragment(Bundle savedInstanceState) {
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("user", mUser.toString());
+    }
+
+    @Override
+    protected void onLoadInstanceState(Bundle savedInstanceState) {
+        super.onLoadInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("user")) {
                 mUser = new User(savedInstanceState.getString("user"));
@@ -42,6 +48,10 @@ public class PostsActivity extends MyActivity {
                 mUser = new User(intent.getStringExtra("user"));
             }
         }
+    }
+
+    @Override
+    protected Fragment constructFragment(Bundle savedInstanceState) {
         return PostsFragment.create(mUser);
     }
 }

@@ -18,7 +18,9 @@ public abstract class MyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.my_activity);
+        onLoadInstanceState(savedInstanceState);
+
+        setContentView(getLayoutId());
 
         FragmentManager fragmentManager = getFragmentManager();
 
@@ -34,6 +36,13 @@ public abstract class MyActivity extends AppCompatActivity {
                     .commit();
         }
 
+    }
+
+    protected int getLayoutId() {
+        return R.layout.my_activity;
+    }
+
+    protected void onLoadInstanceState(Bundle savedInstanceState) {
     }
 
     protected abstract Fragment constructFragment(Bundle savedInstanceState);

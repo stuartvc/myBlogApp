@@ -30,6 +30,10 @@
             android:name=".post.PostsActivity"
             android:label="@string/user_profile_activity_label"
             />
+        <activity
+            android:name=".post.PostViewActivity"
+            android:label="@string/user_profile_activity_label"
+            />
     </application>
 
 </manifest>

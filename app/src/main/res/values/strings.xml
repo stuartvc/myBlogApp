@@ -11,4 +11,5 @@
     <string name="user_profile_activity_label">User Profile</string>
     <string name="posts_button">Posts</string>
     <string name="posts_url">posts/</string>
+    <string name="comments_url">comments/</string>
 </resources>

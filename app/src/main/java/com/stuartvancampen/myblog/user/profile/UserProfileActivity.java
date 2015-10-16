@@ -28,7 +28,19 @@ public class UserProfileActivity extends MyActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("user", mUserPreview.toString());
+    }
+
+    @Override
     protected Fragment constructFragment(Bundle savedInstanceState) {
+        return UserProfileFragment.create(mUserPreview);
+    }
+
+    @Override
+    protected void onLoadInstanceState(Bundle savedInstanceState) {
+        super.onLoadInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("user")) {
                 mUserPreview = new UserPreview(savedInstanceState.getString("user"));
@@ -40,6 +52,5 @@ public class UserProfileActivity extends MyActivity {
                 mUserPreview = new UserPreview(intent.getStringExtra("user"));
             }
         }
-        return UserProfileFragment.create(mUserPreview);
     }
 }
