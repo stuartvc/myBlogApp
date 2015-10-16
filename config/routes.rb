@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
-  resources :comments, except: [:new, :edit]
-  resources :posts, except: [:new, :edit]
-  resources :users, except: [:new, :edit]
+  resources :users, except: [:new, :edit], shallow: true do 
+    resources :posts, except: [:new, :edit] do
+      resources :comments, except: [:new, :edit]
+    end
+  end
+  #resources :posts, except: [:new, :edit]
+  #resources :users, except: [:new, :edit]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

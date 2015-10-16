@@ -1,10 +1,11 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :update, :destroy]
+  before_action :set_user, only: [:index, :create]
 
-  # GET /posts
-  # GET /posts.json
+  # GET users/:user_id/posts
+  # GET users/:user_id/posts.json
   def index
-    @posts = Post.all
+    @posts = @user.posts
 
     render json: @posts, each_serializer: PostPreviewSerializer
   end
@@ -15,8 +16,8 @@ class PostsController < ApplicationController
     render json: @post, serializer: PostSerializer
   end
 
-  # POST /posts
-  # POST /posts.json
+  # POST users/:user_id/posts
+  # POST users/:user_id/posts.json
   def create
     @post = Post.new(post_params)
 
@@ -48,6 +49,10 @@ class PostsController < ApplicationController
   end
 
   private
+
+    def set_user
+      @user = User.find(params[:user_id])
+    end
 
     def set_post
       @post = Post.find(params[:id])
