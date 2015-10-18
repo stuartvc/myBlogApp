@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+
+  get :login, controller: 'application'
+
   resources :users, except: [:new, :edit], shallow: true do 
     resources :posts, except: [:new, :edit] do
       resources :comments, except: [:new, :edit]
