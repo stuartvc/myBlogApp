@@ -2,6 +2,7 @@ package com.stuartvancampen.myblog.user.profile;
 
 import android.app.Fragment;
 import android.content.AsyncTaskLoader;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.stuartvancampen.myblog.MainActivity;
 import com.stuartvancampen.myblog.R;
 import com.stuartvancampen.myblog.post.PostsActivity;
 import com.stuartvancampen.myblog.user.models.User;
@@ -61,6 +63,17 @@ public class UserProfileFragment extends Fragment {
                     Log.d(TAG, "loading url:" + url);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");
+
+
+                    SharedPreferences settings = getActivity().getSharedPreferences("auth", 0);
+                    String auth_token = settings.getString("auth_token", null);
+                    if (auth_token == null) {
+                        getActivity().startActivity(MainActivity.create(getActivity()));
+                        return null;
+                    }
+
+                    String authHeader = "Token " + auth_token;
+                    conn.setRequestProperty("Authorization", authHeader);
 
                     // read the response
                     System.out.println("Response Code: " + conn.getResponseCode());

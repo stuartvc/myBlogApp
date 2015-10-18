@@ -12,7 +12,7 @@ import com.stuartvancampen.myblog.util.MyActivity;
  */
 public class UsersActivity extends MyActivity {
 
-    public static Intent newUsersActivity(Context context) {
+    public static Intent create(Context context) {
         return new Intent(context, UsersActivity.class);
     }
 

@@ -58,7 +58,7 @@ public class PostsFragment extends MyFragment<Post, PostList> {
 
     @Override
     public MyLoader createLoader() {
-        return new MyLoader<>(mAdapter, PostList.class);
+        return new MyLoader<>(getActivity(), mAdapter, PostList.class);
     }
 
     @Override

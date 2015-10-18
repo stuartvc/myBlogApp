@@ -45,7 +45,7 @@ public class UsersFragment extends MyFragment<UserPreview, UserList> {
 
     @Override
     public MyLoader createLoader() {
-        return new MyLoader<>(mAdapter, UserList.class);
+        return new MyLoader<>(getActivity(), mAdapter, UserList.class);
     }
 
     @Override

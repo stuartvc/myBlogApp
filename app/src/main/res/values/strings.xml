@@ -2,7 +2,7 @@
     <string name="app_name">MyBlog</string>
     <string name="user_list_activity_label">Users</string>
 
-    <string name="user_list_button">Get User List</string>
+    <string name="please_login_message">Please Login</string>
     <string name="action_settings">Settings</string>
     <string name="logout">Logout</string>
     <string name="users_url">users/</string>
@@ -12,4 +12,15 @@
     <string name="posts_button">Posts</string>
     <string name="posts_url">posts/</string>
     <string name="comments_url">comments/</string>
+    <string name="login">Login</string>
+    <string name="login_url">login/</string>
+    <string name="authentication_error">Email or password incorrect</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="name">Name</string>
+    <string name="password">password</string>
+    <string name="email">email</string>
+    <string name="submit">Submit</string>
+    <string name="sign_up_activity_label">Sign Up</string>
+    <string name="post_view_activity_label">Post</string>
+    <string name="posts_activity_label">Posts</string>
 </resources>

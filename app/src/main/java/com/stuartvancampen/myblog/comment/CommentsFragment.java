@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.stuartvancampen.myblog.R;
 import com.stuartvancampen.myblog.post.Post;
@@ -54,7 +53,7 @@ public class CommentsFragment extends MyFragment<Comment, CommentList> {
 
     @Override
     public MyLoader createLoader() {
-        return new MyLoader<>(mAdapter, CommentList.class);
+        return new MyLoader<>(getActivity(), mAdapter, CommentList.class);
     }
 
     @Override

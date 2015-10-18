@@ -2,6 +2,7 @@ package com.stuartvancampen.myblog.user.models;
 
 import android.content.Context;
 import android.util.JsonReader;
+import android.util.JsonToken;
 
 import com.stuartvancampen.myblog.R;
 import com.stuartvancampen.myblog.util.MyObject;
@@ -39,6 +40,9 @@ public class UserPreview extends MyObject {
         while (reader.hasNext()) {
             String name = reader.nextName();
             if (name == null) {
+                reader.skipValue();
+            }
+            else if (reader.peek() == JsonToken.NULL) {
                 reader.skipValue();
             }
             else if (name.equals(NAME)) {

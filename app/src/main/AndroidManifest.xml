@@ -28,11 +28,15 @@
             />
         <activity
             android:name=".post.PostsActivity"
-            android:label="@string/user_profile_activity_label"
+            android:label="@string/posts_activity_label"
             />
         <activity
             android:name=".post.PostViewActivity"
-            android:label="@string/user_profile_activity_label"
+            android:label="@string/post_view_activity_label"
+            />
+        <activity
+            android:name=".SignUpActivity"
+            android:label="@string/sign_up_activity_label"
             />
     </application>
 

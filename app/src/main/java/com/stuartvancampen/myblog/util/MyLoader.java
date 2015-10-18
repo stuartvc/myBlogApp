@@ -1,16 +1,21 @@
 package com.stuartvancampen.myblog.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.JsonReader;
 import android.util.Log;
 
+import com.stuartvancampen.myblog.MainActivity;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by Stuart on 25/09/2015.
@@ -35,6 +40,7 @@ public class MyLoader<T extends MyList> {
         String getUrl();
     }
 
+    private final Context mContext;
     private Class<T> mClazz;
     private Handler mHandler;
     private Thread mThread;
@@ -43,7 +49,8 @@ public class MyLoader<T extends MyList> {
     boolean mFinished;
     boolean mReset;
 
-    public MyLoader(MyLoaderCallbacks<T> loaderListener, Class<T> clazz) {
+    public MyLoader(Context context, MyLoaderCallbacks<T> loaderListener, Class<T> clazz) {
+        mContext = context;
         mClazz = clazz;
         mLoaderListener = loaderListener;
         mHandler = new MyHandler(Looper.getMainLooper());
@@ -96,8 +103,19 @@ public class MyLoader<T extends MyList> {
 
                 URL url = new URL(mLoaderListener.getUrl());
                 Log.d(TAG, "url:" + url);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
+
+                SharedPreferences settings = mContext.getSharedPreferences("auth", 0);
+                String auth_token = settings.getString("auth_token", null);
+                if (auth_token == null) {
+                    mContext.startActivity(MainActivity.create(mContext));
+                    mHandler.obtainMessage(STATE.FAILED.ordinal(), null).sendToTarget();
+                    return;
+                }
+
+                String authHeader = "Token " + auth_token;
+                conn.setRequestProperty("Authorization", authHeader);
 
                 // read the response
                 System.out.println("Response Code: " + conn.getResponseCode());
