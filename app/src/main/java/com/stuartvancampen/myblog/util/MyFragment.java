@@ -25,7 +25,6 @@ public abstract class MyFragment<T extends MyObject, LT extends MyList<T>> exten
     }
 
     public abstract MyLoader createLoader();
-
     public abstract MyAdapter createAdapter();
 
     public void onDataLoaded() {

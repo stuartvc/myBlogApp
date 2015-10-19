@@ -4,7 +4,10 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import com.stuartvancampen.myblog.R;
 import com.stuartvancampen.myblog.user.models.UserPreview;
 import com.stuartvancampen.myblog.util.MyActivity;
 
@@ -52,5 +55,27 @@ public class UserProfileActivity extends MyActivity {
                 mUserPreview = new UserPreview(intent.getStringExtra("user"));
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_user_profile, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.menu_edit_profile) {
+            return true;
+        }
+        else if (id == R.id.menu_delete_user) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

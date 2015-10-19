@@ -16,9 +16,7 @@ public class UserList extends MyList<UserPreview> {
     }
 
     @Override
-    public String getListRoot() {
+    public String getRootJson() {
         return JSON_ROOT;
     }
-
-
 }

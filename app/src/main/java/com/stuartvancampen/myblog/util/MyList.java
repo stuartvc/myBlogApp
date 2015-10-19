@@ -1,7 +1,10 @@
 package com.stuartvancampen.myblog.util;
 
-import android.content.Context;
 import android.util.JsonReader;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,36 +12,32 @@ import java.util.ArrayList;
 /**
  * Created by Stuart on 25/09/2015.
  */
-public abstract class MyList<T extends MyObject> extends ArrayList<T> {
-
-    public static MyList newList(Class<MyList> clazz) throws IllegalAccessException, InstantiationException {
-        return clazz.newInstance();
-    }
+public abstract class MyList<T extends MyObject> extends ArrayList<T>  implements SerializableObject {
 
     public MyList() {
     }
 
-    public void loadList(JsonReader reader) throws IOException {
-        reader.beginObject();
-        while (reader.hasNext()) {
-            String name = reader.nextName();
-            if (name == null) {
-                reader.skipValue();
-            }
-            else if (name.equals(getListRoot())) {
-                reader.beginArray();
-                while(reader.hasNext()) {
-                    this.add(createObject(reader));
-                }
-                reader.endArray();
-            }
-            else {
-                reader.skipValue();
-            }
+    public void loadFromJson(JsonReader reader) throws IOException {
+        reader.beginArray();
+        while(reader.hasNext()) {
+            this.add(createObject(reader));
         }
-        reader.endObject();
+        reader.endArray();
+    }
+
+    @Override
+    public JSONObject loadToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (int index = 0; index < size(); index++) {
+            jsonArray.put(this.get(index).loadToJson());
+        }
+        try {
+            return new JSONObject().put(getRootJson(), jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public abstract T createObject(JsonReader reader);
-    public abstract String getListRoot();
 }

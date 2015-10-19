@@ -17,7 +17,7 @@ public class CommentsAdapter extends MyAdapter<CommentVH, Comment, CommentList> 
     private static final String TAG = CommentsAdapter.class.getSimpleName();
 
     public CommentsAdapter(MyFragment frag) {
-        super(frag, CommentList.class);
+        super(frag);
     }
 
     @Override

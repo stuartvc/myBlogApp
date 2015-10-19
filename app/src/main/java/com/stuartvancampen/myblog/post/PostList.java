@@ -16,7 +16,7 @@ public class PostList extends MyList<Post> {
     }
 
     @Override
-    public String getListRoot() {
+    public String getRootJson() {
         return JSON_ROOT;
     }
 }

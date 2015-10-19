@@ -99,6 +99,7 @@ public abstract class MyActivity extends AppCompatActivity {
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction("com.stuartvancampen.myblog.logout");
             sendBroadcast(broadcastIntent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

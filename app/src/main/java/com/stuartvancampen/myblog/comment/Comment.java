@@ -69,7 +69,7 @@ public class Comment extends MyObject {
     }
 
     @Override
-    protected String getRootJson() {
+    public String getRootJson() {
         return ROOT_JSON;
     }
 

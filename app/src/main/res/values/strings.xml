@@ -23,4 +23,6 @@
     <string name="sign_up_activity_label">Sign Up</string>
     <string name="post_view_activity_label">Post</string>
     <string name="posts_activity_label">Posts</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="delete_user">Delete User</string>
 </resources>

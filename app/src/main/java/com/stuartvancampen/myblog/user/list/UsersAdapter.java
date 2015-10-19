@@ -18,7 +18,7 @@ public class UsersAdapter extends MyAdapter<UserVH, UserPreview, UserList> {
     private static final String TAG = UsersAdapter.class.getSimpleName();
 
     public UsersAdapter(MyFragment frag) {
-        super(frag, UserList.class);
+        super(frag);
     }
 
     @Override

@@ -70,7 +70,7 @@ public class User extends MyObject {
     }
 
     @Override
-    protected String getRootJson() {
+    public String getRootJson() {
         return ROOT_JSON;
     }
 

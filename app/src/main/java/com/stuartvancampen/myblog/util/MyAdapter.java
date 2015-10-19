@@ -17,15 +17,9 @@ public abstract class MyAdapter<VH extends RecyclerView.ViewHolder, T extends My
     protected final MyFragment mFragment;
     private LT mList;
 
-    public MyAdapter(MyFragment frag, Class<LT> clazz) {
+    public MyAdapter(MyFragment frag) {
         mFragment = frag;
-        try {
-            mList = clazz.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        mList = null;
     }
 
     protected LayoutInflater getInflater() {
@@ -67,16 +61,12 @@ public abstract class MyAdapter<VH extends RecyclerView.ViewHolder, T extends My
         return mFragment.getString(R.string.base_url) + mFragment.getUrlPath();
     }
 
-    public LT getList() {
-        return mList;
-    }
-
     public T getItem(int position) {
-        return mList.get(position);
+        return (mList == null) ? null : mList.get(position);
     }
 
     @Override
     public int getItemCount() {
-        return mList.size();
+        return (mList == null) ? 0 : mList.size();
     }
 }

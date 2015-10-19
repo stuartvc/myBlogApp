@@ -17,7 +17,7 @@ public class PostsAdapter extends MyAdapter<PostVH, Post, PostList> {
     private static final String TAG = PostsAdapter.class.getSimpleName();
     
     public PostsAdapter(MyFragment frag) {
-        super(frag, PostList.class);
+        super(frag);
     }
 
     @Override

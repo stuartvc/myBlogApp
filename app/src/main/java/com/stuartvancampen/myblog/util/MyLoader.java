@@ -20,7 +20,7 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Created by Stuart on 25/09/2015.
  */
-public class MyLoader<T extends MyList> {
+public class MyLoader<T extends SerializableObject> {
 
     private static final String TAG = MyLoader.class.getSimpleName();
 
@@ -30,7 +30,7 @@ public class MyLoader<T extends MyList> {
         FAILED
     }
 
-    public interface MyLoaderCallbacks<T extends MyList> {
+    public interface MyLoaderCallbacks<T extends SerializableObject> {
         void onFinishLoad(T result);
 
         void onFailed();
@@ -46,8 +46,6 @@ public class MyLoader<T extends MyList> {
     private Thread mThread;
     private MyLoaderCallbacks<T> mLoaderListener;
     final AtomicBoolean mRunning = new AtomicBoolean();
-    boolean mFinished;
-    boolean mReset;
 
     public MyLoader(Context context, MyLoaderCallbacks<T> loaderListener, Class<T> clazz) {
         mContext = context;
@@ -73,9 +71,13 @@ public class MyLoader<T extends MyList> {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
         public void handleMessage(Message msg) {
-            T list = (T) msg.obj;
+            T list = null;
+            try {
+                list = mClazz.cast(msg.obj);
+            } catch(ClassCastException e) {
+                Log.e(TAG, "classCastError handleMessage");
+            }
 
             if (msg.what == STATE.FINISHED.ordinal()) {
                 mLoaderListener.onFinishLoad(list);
@@ -97,10 +99,8 @@ public class MyLoader<T extends MyList> {
             STATE state;
             mHandler.obtainMessage(STATE.STARTED.ordinal()).sendToTarget();
 
-            T list = null;
+            T serializableObject = null;
             try {
-                list = mClazz.newInstance();
-
                 URL url = new URL(mLoaderListener.getUrl());
                 Log.d(TAG, "url:" + url);
                 HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
@@ -121,7 +121,7 @@ public class MyLoader<T extends MyList> {
                 System.out.println("Response Code: " + conn.getResponseCode());
                 InputStreamReader inReader = new InputStreamReader(conn.getInputStream());
                 JsonReader reader = new JsonReader(inReader);
-                list.loadList(reader);
+                serializableObject = loadSerializableObject(mClazz, reader);
                 state = STATE.FINISHED;
             }
             catch (IOException exception) {
@@ -133,7 +133,40 @@ public class MyLoader<T extends MyList> {
                 state = STATE.FAILED;
             }
 
-            mHandler.obtainMessage(state.ordinal(), list).sendToTarget();
+            mHandler.obtainMessage(state.ordinal(), serializableObject).sendToTarget();
         }
+    }
+
+    public T loadSerializableObject(Class<T> clazz, JsonReader reader) {
+        T object = null;
+        boolean foundObject = false;
+        try {
+            object = clazz.newInstance();
+
+            reader.beginObject();
+            while (reader.hasNext()) {
+                String name = reader.nextName();
+                if (name == null) {
+                    reader.skipValue();
+                }
+                else if (name.equals(object.getRootJson())) {
+                    object.loadFromJson(reader);
+                    foundObject = true;
+                }
+                else {
+                    reader.skipValue();
+                }
+            }
+            reader.endObject();
+        } catch (InstantiationException | IllegalAccessException | IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (!foundObject) {
+                Log.e(TAG, "could not find json object for SerializableObject:" + clazz.getSimpleName());
+            }
+        }
+
+        return object;
     }
 }
