@@ -24,6 +24,10 @@ public class Post extends MyObject {
     private String mTitle;
     private Long mId;
 
+    @SuppressWarnings("unused")
+    public Post() {
+    }
+
     public Post(String jsonString) {
         super(jsonString);
     }

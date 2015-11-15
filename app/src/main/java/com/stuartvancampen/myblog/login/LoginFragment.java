@@ -1,4 +1,4 @@
-package com.stuartvancampen.myblog;
+package com.stuartvancampen.myblog.login;
 
 import android.app.Fragment;
 import android.content.SharedPreferences;
@@ -15,75 +15,74 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.stuartvancampen.myblog.R;
 import com.stuartvancampen.myblog.user.list.UsersActivity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.HashMap;
 
 import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by Stuart on 17/10/2015.
  */
-public class SignUpFragment extends Fragment {
+public class LoginFragment extends Fragment {
 
-    private static final String TAG = SignUpFragment.class.getSimpleName();
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.sign_up_fragment, container, false);
+        View view = inflater.inflate(R.layout.activity_main, container, false);
 
-        final EditText name = (EditText) view.findViewById(R.id.sign_up_name);
-        final EditText email = (EditText) view.findViewById(R.id.sign_up_email);
-        final EditText password = (EditText) view.findViewById(R.id.sign_up_password);
+        final EditText email = (EditText) view.findViewById(R.id.user_email);
+        final EditText password = (EditText) view.findViewById(R.id.user_password);
 
-        TextView submit = (TextView) view.findViewById(R.id.submit_sign_up);
-        submit.setOnClickListener(new View.OnClickListener() {
+        TextView loginButton = (TextView) view.findViewById(R.id.login_button);
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signUpUser(name.getText().toString(), email.getText().toString(), password.getText().toString());
+                login(email.getText().toString(), password.getText().toString());
+            }
+        });
+
+        TextView signUpButton = (TextView) view.findViewById(R.id.sign_up_button);
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().startActivity(SignUpActivity.create(getActivity()));
             }
         });
 
         return view;
     }
 
-    private void signUpUser(String name, String email, String password) {
-
-        HashMap<String, String> newUser = new HashMap<>();
-        newUser.put("name", name);
-        newUser.put("email", email);
-        newUser.put("password", password);
-        JSONObject postBody = new JSONObject();
-        try {
-            postBody.put("user", new JSONObject(newUser));
-        } catch (JSONException e) {
-            Log.d(TAG, "jsonException");
-        }
+    private void login(String email, String password) {
+        Toast.makeText(getActivity(),
+                "email:" + email + ", password:" + password,
+                Toast.LENGTH_LONG)
+             .show();
 
         new AsyncTask<String, String, String>() {
 
             @Override
             protected String doInBackground(String... params) {
                 try {
-                    String postBody = params[0];
-                    URL url = new URL(getString(R.string.base_url) + getString(R.string.users_url));
+                    String basicAuth = params[0];
+                    URL url = new URL(getString(R.string.base_url) + getString(R.string.login_url));
                     Log.d("LoginFragment", "loading url:" + url);
                     HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json");
 
-                    DataOutputStream wr = new DataOutputStream( conn.getOutputStream());
-                    wr.write( postBody.getBytes() );
+                    basicAuth = "Basic " + basicAuth;
+                    conn.setRequestProperty("Authorization", basicAuth);
+
+                    conn.setRequestMethod("GET");
 
                     // read the response
                     System.out.println("Response Code: " + conn.getResponseCode());
@@ -118,7 +117,7 @@ public class SignUpFragment extends Fragment {
             protected void onPostExecute(String token) {
                 onLoginAttemptComplete(token);
             }
-        }.execute(postBody.toString());
+        }.execute(Base64.encodeToString((email + ":" + password).getBytes(), Base64.DEFAULT));
     }
 
     private void onLoginAttemptComplete(String token) {

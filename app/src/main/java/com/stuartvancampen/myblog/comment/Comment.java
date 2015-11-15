@@ -23,6 +23,11 @@ public class Comment extends MyObject {
     private Long mId;
     private Long mUserId;
 
+    @SuppressWarnings("unused")
+    public Comment() {
+    }
+
+    @SuppressWarnings("unused")
     public Comment(String jsonString) {
         super(jsonString);
     }

@@ -26,6 +26,10 @@ public class UserPreview extends MyObject {
     private String mEmail;
     private Long mId;
 
+    @SuppressWarnings("unused")
+    public UserPreview() {
+    }
+
     public UserPreview(JsonReader reader) {
         super(reader);
     }
@@ -76,11 +80,11 @@ public class UserPreview extends MyObject {
     }
 
     public String getName() {
-        return mName;
+        return mName == null ? "" : mName;
     }
 
     public String getEmail() {
-        return mEmail;
+        return mEmail == null ? "" : mEmail;
     }
 
     public String getFullUserUrl(Context context) {

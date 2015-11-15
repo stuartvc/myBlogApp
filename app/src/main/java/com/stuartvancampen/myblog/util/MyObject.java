@@ -16,6 +16,9 @@ public abstract class MyObject implements SerializableObject {
 
     private static final String TAG = MyObject.class.getSimpleName();
 
+    public MyObject() {
+    }
+
     public MyObject(String jsonString) {
         this(new JsonReader(new StringReader(jsonString)));
     }

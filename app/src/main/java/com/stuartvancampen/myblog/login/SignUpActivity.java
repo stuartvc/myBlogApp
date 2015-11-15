@@ -1,6 +1,5 @@
-package com.stuartvancampen.myblog;
+package com.stuartvancampen.myblog.login;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;

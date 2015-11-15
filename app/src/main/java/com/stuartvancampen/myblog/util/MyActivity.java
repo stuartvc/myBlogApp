@@ -12,7 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.stuartvancampen.myblog.MainActivity;
+import com.stuartvancampen.myblog.login.LoginActivity;
 import com.stuartvancampen.myblog.R;
 
 /**
@@ -95,7 +95,7 @@ public abstract class MyActivity extends AppCompatActivity {
         else if (id == R.id.menu_logout) {
             SharedPreferences settings = getSharedPreferences("auth", 0);
             settings.edit().remove("auth_token").commit();
-            startActivity(MainActivity.create(this));
+            startActivity(LoginActivity.create(this));
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction("com.stuartvancampen.myblog.logout");
             sendBroadcast(broadcastIntent);

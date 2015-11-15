@@ -8,7 +8,7 @@ import android.os.Message;
 import android.util.JsonReader;
 import android.util.Log;
 
-import com.stuartvancampen.myblog.MainActivity;
+import com.stuartvancampen.myblog.login.LoginActivity;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
