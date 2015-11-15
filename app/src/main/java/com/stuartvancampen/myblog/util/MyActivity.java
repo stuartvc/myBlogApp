@@ -13,6 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.stuartvancampen.myblog.appindexing.LoadingFragment;
 import com.stuartvancampen.myblog.login.LoginActivity;
 import com.stuartvancampen.myblog.R;
@@ -27,10 +30,15 @@ public abstract class MyActivity extends AppCompatActivity {
 
     private boolean mExternalLaunch;
     private RemoteJsonObjectLoader mRemoteLoader;
+    private GoogleApiClient mClient;
+    private boolean mAppIndexingStarted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        mAppIndexingStarted = false;
 
         mExternalLaunch = checkForExternalLaunch(getIntent());
 
@@ -47,6 +55,22 @@ public abstract class MyActivity extends AppCompatActivity {
         registerReceiver(mOnLogoutReceiver, logoutIntent);
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!mExternalLaunch) {
+            startAppIndex();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        if (!mExternalLaunch) {
+            stopAppIndex();
+        }
+        super.onStop();
     }
 
     private void insertFragment(boolean showLoadingFragment) {
@@ -141,5 +165,37 @@ public abstract class MyActivity extends AppCompatActivity {
         }
         return false;
 
+    }
+
+    private void startAppIndex() {
+        if (enableAppIndexing() && !mAppIndexingStarted) {
+            mAppIndexingStarted = true;
+            // Connect your client
+            mClient.connect();
+
+            // Construct the Action performed by the user
+            Action viewAction = buildViewAction();
+
+            // Call the App Indexing API start method after the view has completely rendered
+            AppIndex.AppIndexApi.start(mClient, viewAction);
+        }
+    }
+
+    private void stopAppIndex() {
+        if (enableAppIndexing() && mAppIndexingStarted) {
+            // Call end() and disconnect the client
+            Action viewAction = buildViewAction();
+            AppIndex.AppIndexApi.end(mClient, viewAction);
+            mClient.disconnect();
+            mAppIndexingStarted = false;
+        }
+    }
+
+    protected boolean enableAppIndexing() {
+        return false;
+    }
+
+    protected Action buildViewAction() {
+        return null;
     }
 }

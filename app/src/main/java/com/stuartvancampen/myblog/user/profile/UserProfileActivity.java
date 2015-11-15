@@ -4,20 +4,28 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.Thing;
 import com.stuartvancampen.myblog.R;
 import com.stuartvancampen.myblog.user.models.User;
 import com.stuartvancampen.myblog.user.models.UserPreview;
 import com.stuartvancampen.myblog.util.MyActivity;
 import com.stuartvancampen.myblog.util.RemoteJsonObjectLoader;
 
+import java.net.URI;
+
 /**
  * Created by Stuart on 14/10/2015.
  */
 public class UserProfileActivity extends MyActivity {
+
+    static final String APP_URL = "android-app://com.stuartvancampen.myblog/https/dry-tor-1032.herokuapp.com/users/";
+    static final String WEB_URL = "https://dry-tor-1032.herokuapp.com/users/";
 
     private static final String EXTRA_USER = "user";
     private User mUser;
@@ -109,5 +117,29 @@ public class UserProfileActivity extends MyActivity {
     @Override
     protected RemoteJsonObjectLoader getRemoteLoader(String url) {
         return createRemoteUserLoader(this, url);
+    }
+
+    @Override
+    protected boolean enableAppIndexing() {
+        return mUser != null;
+    }
+
+    @Override
+    protected Action buildViewAction() {
+        /*return Action.newAction(Action.TYPE_VIEW,
+                mUser.getName(),
+                Uri.parse(WEB_URL + mUser.getId()),
+                Uri.parse(APP_URL + mUser.getId()));
+        */
+
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(new Thing.Builder()
+                        .setName(mUser.getName())
+                        .setDescription(mUser.getEmail())
+                        .setId(Uri.parse(WEB_URL + mUser.getId()).toString())
+                        .setUrl(Uri.parse(APP_URL + mUser.getId()))
+                        .put("image", "http://weknowyourdreams.com/images/dog/dog-07.jpg")
+                        .build())
+                .build();
     }
 }
