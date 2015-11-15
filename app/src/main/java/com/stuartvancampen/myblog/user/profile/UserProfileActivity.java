@@ -1,5 +1,6 @@
 package com.stuartvancampen.myblog.user.profile;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -21,12 +22,16 @@ public class UserProfileActivity extends MyActivity {
     private static final String EXTRA_USER = "user";
     private User mUser;
 
-    public static void start(Context context, UserPreview userPreview) {
-        start(context, userPreview.getFullUserUrl(context));
+    public static void start(Activity activity, UserPreview userPreview) {
+        start(activity, userPreview.getFullUserUrl(activity));
     }
 
-    public static void start(Context context, String userUrl) {
-        new RemoteJsonObjectLoader<User>(context, User.class, getEmptyStartIntent(context), userUrl, EXTRA_USER);
+    public static void start(Activity activity, String url) {
+        createRemoteUserLoader(activity, url).startLoad();
+    }
+
+    private static RemoteJsonObjectLoader<User> createRemoteUserLoader(Activity activity, String url) {
+        return new RemoteJsonObjectLoader<User>(activity, User.class, getEmptyStartIntent(activity), url, EXTRA_USER);
     }
 
     public static void start(Context context, User user) {
@@ -54,7 +59,7 @@ public class UserProfileActivity extends MyActivity {
     }
 
     @Override
-    protected Fragment constructFragment(Bundle savedInstanceState) {
+    protected Fragment constructFragment() {
         return UserProfileFragment.create(mUser);
     }
 
@@ -94,5 +99,15 @@ public class UserProfileActivity extends MyActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected boolean allowExternalLaunch() {
+        return true;
+    }
+
+    @Override
+    protected RemoteJsonObjectLoader getRemoteLoader(String url) {
+        return createRemoteUserLoader(this, url);
     }
 }

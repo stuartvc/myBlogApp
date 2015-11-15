@@ -4,9 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 
-import com.stuartvancampen.myblog.R;
 import com.stuartvancampen.myblog.user.models.User;
 import com.stuartvancampen.myblog.util.MyActivity;
 
@@ -51,7 +49,7 @@ public class PostsActivity extends MyActivity {
     }
 
     @Override
-    protected Fragment constructFragment(Bundle savedInstanceState) {
+    protected Fragment constructFragment() {
         return PostsFragment.create(mUser);
     }
 }

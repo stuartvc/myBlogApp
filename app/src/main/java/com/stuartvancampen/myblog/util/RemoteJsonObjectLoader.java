@@ -1,7 +1,10 @@
 package com.stuartvancampen.myblog.util;
 
-import android.content.Context;
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
+
+import com.stuartvancampen.myblog.appindexing.LoadingFragment;
 
 /**
  * Created by Stuart on 14/11/2015.
@@ -11,20 +14,25 @@ public class RemoteJsonObjectLoader<T extends SerializableObject> extends MyLoad
     private final Intent mStartIntent;
     private final String mUrl;
     private final String mExtraKey;
+    private LoadingFragment mLoadingFragment;
 
-    public RemoteJsonObjectLoader(Context context, Class<T> clazz, Intent startIntent, String url, String extraKey) {
-        super(context, null, clazz);
+    public RemoteJsonObjectLoader(Activity activity, Class<T> clazz, Intent startIntent, String url, String extraKey) {
+        super(activity, null, clazz);
         setListener(this);
         mStartIntent = startIntent;
         mUrl = url;
         mExtraKey = extraKey;
-        startLoad();
     }
 
     @Override
     public void onFinishLoad(SerializableObject result) {
-        mStartIntent.putExtra(mExtraKey, result.loadToJson().toString());
-        mContext.startActivity(mStartIntent);
+        if (result != null) {
+            mStartIntent.putExtra(mExtraKey, result.loadToJson().toString());
+            mContext.startActivity(mStartIntent);
+            if (mLoadingFragment != null) {
+                mLoadingFragment.loadingFinished();
+            }
+        }
     }
 
     @Override
@@ -40,5 +48,10 @@ public class RemoteJsonObjectLoader<T extends SerializableObject> extends MyLoad
     @Override
     public String getUrl() {
         return mUrl;
+    }
+
+    public void associateWithFragmentAndStartLoading(LoadingFragment fragment) {
+        mLoadingFragment = fragment;
+        startLoad();
     }
 }

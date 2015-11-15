@@ -1,12 +1,9 @@
 package com.stuartvancampen.myblog.post;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -69,7 +66,7 @@ public class PostViewActivity extends MyActivity {
     }
 
     @Override
-    protected Fragment constructFragment(Bundle savedInstanceState) {
+    protected Fragment constructFragment() {
         return CommentsFragment.create(mPost);
     }
 }

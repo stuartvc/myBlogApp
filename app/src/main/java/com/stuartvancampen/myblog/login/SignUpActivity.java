@@ -3,7 +3,6 @@ package com.stuartvancampen.myblog.login;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
 import com.stuartvancampen.myblog.util.MyActivity;
 
@@ -17,7 +16,7 @@ public class SignUpActivity extends MyActivity {
     }
 
     @Override
-    protected Fragment constructFragment(Bundle savedInstanceState) {
+    protected Fragment constructFragment() {
         return new SignUpFragment();
     }
 }

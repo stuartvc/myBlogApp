@@ -23,7 +23,7 @@ public class UsersActivity extends MyActivity {
     }
 
     @Override
-    protected Fragment constructFragment(Bundle savedInstanceState) {
+    protected Fragment constructFragment() {
         return UsersFragment.create();
     }
 }
