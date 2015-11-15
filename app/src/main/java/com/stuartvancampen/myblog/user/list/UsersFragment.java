@@ -60,6 +60,6 @@ public class UsersFragment extends MyFragment<UserPreview, UserList> {
 
     @Override
     public void OnItemClickListener(View view, int position) {
-        startActivity(UserProfileActivity.create(getActivity(), ((UsersAdapter)mAdapter).getItem(position)));
+        UserProfileActivity.start(getActivity(), ((UsersAdapter) mAdapter).getItem(position));
     }
 }

@@ -8,20 +8,35 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.stuartvancampen.myblog.R;
+import com.stuartvancampen.myblog.user.models.User;
 import com.stuartvancampen.myblog.user.models.UserPreview;
 import com.stuartvancampen.myblog.util.MyActivity;
+import com.stuartvancampen.myblog.util.RemoteJsonObjectLoader;
 
 /**
  * Created by Stuart on 14/10/2015.
  */
 public class UserProfileActivity extends MyActivity {
 
-    private UserPreview mUserPreview;
+    private static final String EXTRA_USER = "user";
+    private User mUser;
 
-    public static Intent create(Context context, UserPreview userPreview) {
-        Intent startIntent = new Intent(context, UserProfileActivity.class);
-        startIntent.putExtra("user", userPreview.toString());
-        return startIntent;
+    public static void start(Context context, UserPreview userPreview) {
+        start(context, userPreview.getFullUserUrl(context));
+    }
+
+    public static void start(Context context, String userUrl) {
+        new RemoteJsonObjectLoader<User>(context, User.class, getEmptyStartIntent(context), userUrl, EXTRA_USER);
+    }
+
+    public static void start(Context context, User user) {
+        Intent startIntent = getEmptyStartIntent(context);
+        startIntent.putExtra(EXTRA_USER, user.toString());
+        context.startActivity(startIntent);
+    }
+
+    private static Intent getEmptyStartIntent(Context context) {
+        return new Intent(context, UserProfileActivity.class);
     }
 
     @Override
@@ -33,26 +48,28 @@ public class UserProfileActivity extends MyActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("user", mUserPreview.toString());
+        if (mUser != null) {
+            outState.putString(EXTRA_USER, mUser.toString());
+        }
     }
 
     @Override
     protected Fragment constructFragment(Bundle savedInstanceState) {
-        return UserProfileFragment.create(mUserPreview);
+        return UserProfileFragment.create(mUser);
     }
 
     @Override
     protected void onLoadInstanceState(Bundle savedInstanceState) {
         super.onLoadInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey("user")) {
-                mUserPreview = new UserPreview(savedInstanceState.getString("user"));
+            if (savedInstanceState.containsKey(EXTRA_USER)) {
+                mUser = new User(savedInstanceState.getString(EXTRA_USER));
             }
         }
         else {
             Intent intent = getIntent();
-            if (intent.hasExtra("user")) {
-                mUserPreview = new UserPreview(intent.getStringExtra("user"));
+            if (intent.hasExtra(EXTRA_USER)) {
+                mUser = new User(intent.getStringExtra(EXTRA_USER));
             }
         }
     }

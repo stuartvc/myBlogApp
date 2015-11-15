@@ -24,11 +24,15 @@ public class User extends MyObject {
     private String mEmail;
     private Long mId;
 
+    @SuppressWarnings("unused")
+    public User() {
+    }
 
     public User(String jsonString) {
         super(jsonString);
     }
 
+    @SuppressWarnings("unused")
     public User(JsonReader reader) {
         super(reader);
     }
@@ -75,11 +79,11 @@ public class User extends MyObject {
     }
 
     public String getName() {
-        return mName;
+        return mName == null ? "" : mName;
     }
 
     public String getEmail() {
-        return mEmail;
+        return mEmail == null ? "" : mEmail;
     }
 
     public long getId() {

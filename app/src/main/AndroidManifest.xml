@@ -24,8 +24,17 @@
             />
         <activity
             android:name=".user.profile.UserProfileActivity"
-            android:label="@string/user_profile_activity_label"
-            />
+            android:label="@string/user_profile_activity_label">
+            <intent-filter android:label="@string/user_profile_activity_label">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://recipe-app.com/recipes" -->
+                <data android:scheme="https"
+                    android:host="dry-tor-1032.herokuapp.com"
+                    android:pathPrefix="/users" />
+            </intent-filter>
+            </activity>
         <activity
             android:name=".post.PostsActivity"
             android:label="@string/posts_activity_label"

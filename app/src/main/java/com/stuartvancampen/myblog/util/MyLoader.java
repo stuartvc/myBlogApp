@@ -40,7 +40,7 @@ public class MyLoader<T extends SerializableObject> {
         String getUrl();
     }
 
-    private final Context mContext;
+    protected final Context mContext;
     private Class<T> mClazz;
     private Handler mHandler;
     private Thread mThread;
@@ -56,13 +56,17 @@ public class MyLoader<T extends SerializableObject> {
     }
 
     public void startLoad() {
-
         if (!mRunning.get()) {
             mRunning.set(true);
             mThread = new Thread(new MyRunnable());
             mThread.start();
         }
     }
+
+    protected void setListener(MyLoaderCallbacks<T> listener) {
+        mLoaderListener = listener;
+    }
+    
 
     private class MyHandler extends Handler {
 
@@ -79,14 +83,19 @@ public class MyLoader<T extends SerializableObject> {
                 Log.e(TAG, "classCastError handleMessage");
             }
 
-            if (msg.what == STATE.FINISHED.ordinal()) {
-                mLoaderListener.onFinishLoad(list);
-                mRunning.set(false);
-            } else if (msg.what == STATE.STARTED.ordinal()) {
-                mLoaderListener.onStarted();
-            } else if (msg.what == STATE.FAILED.ordinal()) {
-                mLoaderListener.onFailed();
-            } else {
+            if (mLoaderListener != null) {
+                if (msg.what == STATE.FINISHED.ordinal()) {
+                    mLoaderListener.onFinishLoad(list);
+                    mRunning.set(false);
+                } else if (msg.what == STATE.STARTED.ordinal()) {
+                    mLoaderListener.onStarted();
+                } else if (msg.what == STATE.FAILED.ordinal()) {
+                    mLoaderListener.onFailed();
+                } else {
+                    super.handleMessage(msg);
+                }
+            }
+            else {
                 super.handleMessage(msg);
             }
         }
@@ -109,7 +118,7 @@ public class MyLoader<T extends SerializableObject> {
                 SharedPreferences settings = mContext.getSharedPreferences("auth", 0);
                 String auth_token = settings.getString("auth_token", null);
                 if (auth_token == null) {
-                    mContext.startActivity(MainActivity.create(mContext));
+                    mContext.startActivity(LoginActivity.create(mContext));
                     mHandler.obtainMessage(STATE.FAILED.ordinal(), null).sendToTarget();
                     return;
                 }
@@ -137,7 +146,7 @@ public class MyLoader<T extends SerializableObject> {
         }
     }
 
-    public T loadSerializableObject(Class<T> clazz, JsonReader reader) {
+    private T loadSerializableObject(Class<T> clazz, JsonReader reader) {
         T object = null;
         boolean foundObject = false;
         try {

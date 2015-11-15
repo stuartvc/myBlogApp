@@ -1,47 +1,37 @@
 package com.stuartvancampen.myblog.user.profile;
 
 import android.app.Fragment;
-import android.content.AsyncTaskLoader;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.stuartvancampen.myblog.MainActivity;
 import com.stuartvancampen.myblog.R;
 import com.stuartvancampen.myblog.post.PostsActivity;
 import com.stuartvancampen.myblog.user.models.User;
 import com.stuartvancampen.myblog.user.models.UserPreview;
-import com.stuartvancampen.myblog.util.MyAdapter;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
+import com.stuartvancampen.myblog.util.MyLoader;
 
 /**
  * Created by Stuart on 14/10/2015.
  */
-public class UserProfileFragment extends Fragment {
+public class UserProfileFragment extends Fragment{
 
     private static final String TAG = UserProfileFragment.class.getSimpleName();
-    private UserPreview mUserPreview;
+
+    private static final String EXTRA_USER = "user";
+
     private User mUser;
 
-    public static Fragment create(UserPreview userPreview) {
+    public static Fragment create(User user) {
         Fragment frag = new UserProfileFragment();
         Bundle args = new Bundle();
-        args.putString("user", userPreview.toString());
+        args.putString(EXTRA_USER, user.toString());
         frag.setArguments(args);
         return frag;
     }
@@ -51,69 +41,15 @@ public class UserProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         Bundle args = getArguments();
-        mUserPreview = new UserPreview(args.getString("user"));
-
-        new AsyncTask<UserPreview, String, User>() {
-
-            @Override
-            protected User doInBackground(UserPreview... params) {
-                try {
-                    UserPreview userPreview = params[0];
-                    URL url = new URL(userPreview.getFullUserUrl(getActivity()));
-                    Log.d(TAG, "loading url:" + url);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("GET");
-
-
-                    SharedPreferences settings = getActivity().getSharedPreferences("auth", 0);
-                    String auth_token = settings.getString("auth_token", null);
-                    if (auth_token == null) {
-                        getActivity().startActivity(MainActivity.create(getActivity()));
-                        return null;
-                    }
-
-                    String authHeader = "Token " + auth_token;
-                    conn.setRequestProperty("Authorization", authHeader);
-
-                    // read the response
-                    System.out.println("Response Code: " + conn.getResponseCode());
-                    InputStreamReader inReader = new InputStreamReader(conn.getInputStream());
-                    JsonReader reader = new JsonReader(inReader);
-
-                    reader.beginObject();
-                    while (reader.hasNext()) {
-                        String name = reader.nextName();
-                        if (name == null) {
-                            reader.skipValue();
-                        }
-                        else if (name.equals("user")) {
-                            return new User(reader);
-                        }
-                        else {
-                            reader.skipValue();
-                        }
-                    }
-                    reader.endObject();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (ProtocolException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
+        if (args != null) {
+            if (args.containsKey(EXTRA_USER)) {
+                mUser = new User(args.getString(EXTRA_USER));
             }
-
-            @Override
-            protected void onPostExecute(User user) {
-                onLoadedUser(user);
+            else {
+                Log.e(TAG, "user object not found in arguments, finishing");
+                getActivity().finish();
             }
-        }.execute(mUserPreview);
-    }
-
-    private void onLoadedUser(User user) {
-        mUser = user;
-        Log.d(TAG, "loadedUser:" + mUser.toString());
+        }
     }
 
     @Nullable
@@ -122,9 +58,9 @@ public class UserProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.user_profile_layout, container, false);
 
         TextView name = (TextView) view.findViewById(R.id.user_name);
-        name.setText(mUserPreview.getName());
+        name.setText(mUser.getName());
         TextView email = (TextView) view.findViewById(R.id.user_email);
-        email.setText(mUserPreview.getEmail());
+        email.setText(mUser.getEmail());
 
         TextView postsButton = (TextView) view.findViewById(R.id.posts_button);
         postsButton.setOnClickListener(new View.OnClickListener() {
