@@ -9,7 +9,7 @@ class ApplicationController < ActionController::API
 		authenticate_with_http_basic do |email, password|
 			user = User.find_by(email: email)
 			if user && user.password == password
-				render json: { token: user.auth_token }
+				render json: { token: user.auth_token, :user => user.as_json(:only => [:id, :name, :email]) }
 			else
 				render json: {error: 'incorrect credentials'}, status: 401
 			end
@@ -17,7 +17,9 @@ class ApplicationController < ActionController::API
 	end
 
 	def loginVerification
-		render json: { login: 'success'}, status: 200
+		token = request.headers["Authorization"].split(' ')[1]
+		@user = User.find_by(auth_token: token)
+		render json: { login: 'success', :user => @user.as_json(:only => [:id, :name, :email])}, status: 200
 	end
 
 	private
