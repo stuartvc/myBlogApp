@@ -17,7 +17,7 @@ class ApplicationController < ActionController::API
 	end
 
 	def loginVerification
-		render json: { "login: success"}, status: 200
+		render json: { login: 'success'}, status: 200
 	end
 
 	private
