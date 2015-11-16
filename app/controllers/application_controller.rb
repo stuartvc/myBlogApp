@@ -16,6 +16,10 @@ class ApplicationController < ActionController::API
 		end
 	end
 
+	def loginVerification
+		render json: { "login: success"}, status: 200
+	end
+
 	private
 
 

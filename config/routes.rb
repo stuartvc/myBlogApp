@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   get :login, controller: 'application'
+  get :loginVerification, controller: 'application'
 
   resources :users, except: [:new, :edit], shallow: true do 
     resources :posts, except: [:new, :edit] do
