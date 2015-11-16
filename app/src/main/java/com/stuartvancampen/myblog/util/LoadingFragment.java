@@ -1,4 +1,4 @@
-package com.stuartvancampen.myblog.appindexing;
+package com.stuartvancampen.myblog.util;
 
 import android.app.Activity;
 import android.app.Fragment;

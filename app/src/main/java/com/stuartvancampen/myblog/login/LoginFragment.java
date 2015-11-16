@@ -29,11 +29,12 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Created by Stuart on 17/10/2015.
  */
-public class LoginFragment extends Fragment {
-
+public class LoginFragment extends Fragment implements OnLoginCallback {
+    
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        new ASyncLoginRequest(this, getActivity());
     }
 
     @Nullable
@@ -69,69 +70,16 @@ public class LoginFragment extends Fragment {
                 Toast.LENGTH_LONG)
              .show();
 
-        new AsyncTask<String, String, String>() {
-
-            @Override
-            protected String doInBackground(String... params) {
-                try {
-                    String basicAuth = params[0];
-                    URL url = new URL(getString(R.string.base_url) + getString(R.string.login_url));
-                    Log.d("LoginFragment", "loading url:" + url);
-                    HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-
-                    basicAuth = "Basic " + basicAuth;
-                    conn.setRequestProperty("Authorization", basicAuth);
-
-                    conn.setRequestMethod("GET");
-
-                    // read the response
-                    System.out.println("Response Code: " + conn.getResponseCode());
-                    InputStreamReader inReader = new InputStreamReader(conn.getInputStream());
-                    JsonReader reader = new JsonReader(inReader);
-
-                    reader.beginObject();
-                    while (reader.hasNext()) {
-                        String name = reader.nextName();
-                        if (name == null) {
-                            reader.skipValue();
-                        }
-                        else if (name.equals("token")) {
-                            return reader.nextString();
-                        }
-                        else {
-                            reader.skipValue();
-                        }
-                    }
-                    reader.endObject();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (ProtocolException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(String token) {
-                onLoginAttemptComplete(token);
-            }
-        }.execute(Base64.encodeToString((email + ":" + password).getBytes(), Base64.DEFAULT));
+        new ASyncLoginRequest(email, password, this, getActivity());
     }
 
-    private void onLoginAttemptComplete(String token) {
-        if (token == null) {
-            Toast.makeText(getActivity(), R.string.authentication_error, Toast.LENGTH_LONG).show();
+    @Override
+    public void onLoginComplete(boolean success) {
+        if (success) {
+            getActivity().startActivity(UsersActivity.create(getActivity()));
         }
         else {
-            Log.d("LoginFragment", "token:" + token);
-            SharedPreferences settings = getActivity().getSharedPreferences("auth", 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString("auth_token", token);
-            editor.commit();
-
-            getActivity().startActivity(UsersActivity.create(getActivity()));
+            Toast.makeText(getActivity(), R.string.authentication_error, Toast.LENGTH_LONG).show();
         }
     }
 }

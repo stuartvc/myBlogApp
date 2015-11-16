@@ -1,10 +1,7 @@
 package com.stuartvancampen.myblog.util;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
-
-import com.stuartvancampen.myblog.appindexing.LoadingFragment;
 
 /**
  * Created by Stuart on 14/11/2015.

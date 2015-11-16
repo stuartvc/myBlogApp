@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.stuartvancampen.myblog.appindexing.LoadingFragment;
 import com.stuartvancampen.myblog.login.LoginActivity;
 import com.stuartvancampen.myblog.R;
 
