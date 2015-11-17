@@ -27,7 +27,7 @@ class ApplicationController < ActionController::API
 
 	def authenticate_user_with_token
 	  unless authenticate_with_http_token { |token, options| User.find_by(auth_token: token) }
-	    render json: { error: Bad Token'}, status: 401
+	    render json: { error: 'Bad Token'}, status: 401
 	  end
 	end
 end
