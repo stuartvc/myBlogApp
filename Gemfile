@@ -5,6 +5,8 @@ gem 'rails', '4.2.4'
 
 gem 'rails-api'
 
+gem 'rollbar', '~> 2.4.0'
+
 gem 'spring', :group => :development
 
 group :development, :test do
