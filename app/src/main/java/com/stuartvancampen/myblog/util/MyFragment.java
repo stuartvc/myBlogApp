@@ -1,13 +1,11 @@
 package com.stuartvancampen.myblog.util;
 
-import android.app.Fragment;
 import android.os.Bundle;
-import android.view.View;
 
 /**
  * Created by Stuart on 25/09/2015.
  */
-public abstract class MyFragment<T extends MyObject, LT extends MyList<T>> extends Fragment implements OnItemClickListener {
+public abstract class MyFragment<T extends MyObject, LT extends MyList<T>> extends BaseFragment implements OnItemClickListener {
 
     protected MyAdapter mAdapter;
     protected MyLoader mLoader;

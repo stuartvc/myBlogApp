@@ -1,13 +1,8 @@
 package com.stuartvancampen.myblog.login;
 
-import android.app.Fragment;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Base64;
-import android.util.JsonReader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,25 +11,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stuartvancampen.myblog.R;
+import com.stuartvancampen.myblog.session.Session;
 import com.stuartvancampen.myblog.user.list.UsersActivity;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
+import com.stuartvancampen.myblog.util.BaseFragment;
 
 /**
  * Created by Stuart on 17/10/2015.
  */
-public class LoginFragment extends Fragment implements OnLoginCallback {
-    
+public class LoginFragment extends BaseFragment implements OnLoginCallback {
+
+    private ProgressDialog mLoadingDialog;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Session session = Session.getInstance();
+        if (!session.isLoggedIn()) {
+            new ASyncLoginRequest(this, getActivity());
+        }
+        else {
+            logInSuccess();
+        }
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        new ASyncLoginRequest(this, getActivity());
     }
 
     @Nullable
@@ -70,13 +72,25 @@ public class LoginFragment extends Fragment implements OnLoginCallback {
                 Toast.LENGTH_LONG)
              .show();
 
+        mLoadingDialog = new ProgressDialog(getActivity());
+        mLoadingDialog.setMessage("Loading...");
+        mLoadingDialog.show();
+
         new ASyncLoginRequest(email, password, this, getActivity());
+    }
+
+    private void logInSuccess() {
+        getActivity().startActivity(UsersActivity.create(getActivity()));
+        getActivity().finish();
     }
 
     @Override
     public void onLoginComplete(boolean success) {
+        if (mLoadingDialog != null) {
+            mLoadingDialog.dismiss();
+        }
         if (success) {
-            getActivity().startActivity(UsersActivity.create(getActivity()));
+            logInSuccess();
         }
         else {
             Toast.makeText(getActivity(), R.string.authentication_error, Toast.LENGTH_LONG).show();

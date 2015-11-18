@@ -18,6 +18,8 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.stuartvancampen.myblog.login.LoginActivity;
 import com.stuartvancampen.myblog.R;
+import com.stuartvancampen.myblog.session.AuthPreferences;
+import com.stuartvancampen.myblog.session.Session;
 
 /**
  * Created by Stuart on 13/10/2015.
@@ -95,6 +97,7 @@ public abstract class MyActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         unregisterReceiver(mOnLogoutReceiver);
     }
 
@@ -134,9 +137,11 @@ public abstract class MyActivity extends AppCompatActivity {
             return true;
         }
         else if (id == R.id.menu_logout) {
-            SharedPreferences settings = getSharedPreferences("auth", 0);
-            settings.edit().remove("auth_token").commit();
+            closeOptionsMenu();
+            AuthPreferences.get().clearAuthToken();
+
             startActivity(LoginActivity.create(this));
+
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction("com.stuartvancampen.myblog.logout");
             sendBroadcast(broadcastIntent);

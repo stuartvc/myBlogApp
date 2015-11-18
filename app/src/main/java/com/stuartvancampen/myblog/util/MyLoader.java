@@ -9,6 +9,7 @@ import android.util.JsonReader;
 import android.util.Log;
 
 import com.stuartvancampen.myblog.login.LoginActivity;
+import com.stuartvancampen.myblog.session.AuthPreferences;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -115,8 +116,7 @@ public class MyLoader<T extends SerializableObject> {
                 HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
 
-                SharedPreferences settings = mContext.getSharedPreferences("auth", 0);
-                String auth_token = settings.getString("auth_token", null);
+                String auth_token = AuthPreferences.get().getAuthToken();
                 if (auth_token == null) {
                     mContext.startActivity(LoginActivity.create(mContext));
                     mHandler.obtainMessage(STATE.FAILED.ordinal(), null).sendToTarget();

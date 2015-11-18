@@ -15,12 +15,13 @@ import com.stuartvancampen.myblog.R;
 import com.stuartvancampen.myblog.post.PostsActivity;
 import com.stuartvancampen.myblog.user.models.User;
 import com.stuartvancampen.myblog.user.models.UserPreview;
+import com.stuartvancampen.myblog.util.BaseFragment;
 import com.stuartvancampen.myblog.util.MyLoader;
 
 /**
  * Created by Stuart on 14/10/2015.
  */
-public class UserProfileFragment extends Fragment{
+public class UserProfileFragment extends BaseFragment{
 
     private static final String TAG = UserProfileFragment.class.getSimpleName();
 

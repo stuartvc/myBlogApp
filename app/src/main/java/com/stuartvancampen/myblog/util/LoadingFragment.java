@@ -13,7 +13,7 @@ import com.stuartvancampen.myblog.R;
 /**
  * Created by Stuart on 14/11/2015.
  */
-public class LoadingFragment extends Fragment {
+public class LoadingFragment extends BaseFragment {
 
     private static final String TAG = LoadingFragment.class.getSimpleName();
 

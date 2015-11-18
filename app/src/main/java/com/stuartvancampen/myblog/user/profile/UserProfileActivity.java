@@ -8,10 +8,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.Thing;
 import com.stuartvancampen.myblog.R;
+import com.stuartvancampen.myblog.session.Session;
 import com.stuartvancampen.myblog.user.models.User;
 import com.stuartvancampen.myblog.user.models.UserPreview;
 import com.stuartvancampen.myblog.util.MyActivity;
@@ -85,11 +87,14 @@ public class UserProfileActivity extends MyActivity {
                 mUser = new User(intent.getStringExtra(EXTRA_USER));
             }
         }
+        Toast.makeText(this, "is logged in: " + Session.getInstance().isLoggedInUser(mUser), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_user_profile, menu);
+        if (Session.getInstance().isLoggedInUser(mUser)) {
+            getMenuInflater().inflate(R.menu.menu_user_profile, menu);
+        }
 
         return super.onCreateOptionsMenu(menu);
     }

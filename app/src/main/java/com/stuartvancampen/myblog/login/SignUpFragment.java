@@ -1,7 +1,5 @@
 package com.stuartvancampen.myblog.login;
 
-import android.app.Fragment;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,7 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stuartvancampen.myblog.R;
+import com.stuartvancampen.myblog.session.AuthPreferences;
 import com.stuartvancampen.myblog.user.list.UsersActivity;
+import com.stuartvancampen.myblog.util.BaseFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,7 +33,7 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Created by Stuart on 17/10/2015.
  */
-public class SignUpFragment extends Fragment {
+public class SignUpFragment extends BaseFragment {
 
     private static final String TAG = SignUpFragment.class.getSimpleName();
 
@@ -127,10 +127,8 @@ public class SignUpFragment extends Fragment {
         }
         else {
             Log.d("LoginFragment", "token:" + token);
-            SharedPreferences settings = getActivity().getSharedPreferences("auth", 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString("auth_token", token);
-            editor.commit();
+
+            AuthPreferences.get().setAuthToken(token);
 
             getActivity().startActivity(UsersActivity.create(getActivity()));
         }

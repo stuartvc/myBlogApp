@@ -89,4 +89,11 @@ public class User extends MyObject {
     public long getId() {
         return mId == null ? 0 : mId;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return (o != null &&
+                o instanceof User &&
+                ((User) o).mId.equals(mId));
+    }
 }
