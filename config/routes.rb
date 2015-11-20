@@ -3,11 +3,16 @@ Rails.application.routes.draw do
   get :login, controller: 'application'
   get :loginVerification, controller: 'application'
 
-  resources :users, except: [:new, :edit], shallow: true do 
-    resources :posts, except: [:new, :edit] do
-      resources :comments, except: [:new, :edit]
-    end
+  resource :users, except: [:new, :edit, :show]
+
+  resources :users, only: [:index, :show] do 
+    get '/posts', to: 'posts#users_posts'
+    get '/comments', to: 'comments#users_comments'
   end
+
+  resources :posts, except: [:new, :edit], shallow: true do
+    resources :comments, except: [:new, :edit]
+  end 
   #resources :posts, except: [:new, :edit]
   #resources :users, except: [:new, :edit]
   # The priority is based upon order of creation: first created -> highest priority.

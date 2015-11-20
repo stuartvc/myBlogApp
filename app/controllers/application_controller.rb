@@ -17,17 +17,17 @@ class ApplicationController < ActionController::API
 	end
 
 	def loginVerification
-		token = request.headers["Authorization"].split(' ')[1]
-		@user = User.find_by(auth_token: token)
-		render json: { login: 'success', :user => @user.as_json(:only => [:id, :name, :email])}, status: 200
+		render json: { login: 'success', :user => @current_user.as_json(:only => [:id, :name, :email])}, status: 200
 	end
 
 	private
 
 
 	def authenticate_user_with_token
-	  unless authenticate_with_http_token { |token, options| User.find_by(auth_token: token) }
-	    render json: { error: 'Bad Token'}, status: 401
-	  end
+		if user = authenticate_with_http_token { |token, options| User.find_by(auth_token: token) }
+			@current_user = user
+		else
+			render json: { error: 'Bad Token'}, status: 401
+		end
 	end
 end
