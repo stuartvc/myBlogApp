@@ -48,6 +48,10 @@ class CommentsController < ApplicationController
     head :no_content
   end
 
+  def users_comments
+    render json: {error: "not implemented"}, status: 500
+  end
+
   private
 
     def set_comment

@@ -18,7 +18,7 @@ class PostsController < ApplicationController
   # POST users/:user_id/posts
   # POST users/:user_id/posts.json
   def create
-    @post = Post.new(post_params)
+    @post = Post.new(post_params.merge(:user_id => @current_user.id))
 
     if @post.save
       render json: @post, status: :created, location: @post
@@ -45,6 +45,10 @@ class PostsController < ApplicationController
     @post.destroy
 
     head :no_content
+  end
+
+  def users_posts
+    render json: {error: "not implemented"}, status: 500
   end
 
   private
