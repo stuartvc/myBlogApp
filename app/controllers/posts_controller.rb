@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   # GET users/:user_id/posts
   # GET users/:user_id/posts.json
   def index
-    @posts = @user.posts
+    @posts = @current_user.posts
 
     render json: @posts, each_serializer: PostPreviewSerializer
   end
@@ -48,7 +48,9 @@ class PostsController < ApplicationController
   end
 
   def users_posts
-    render json: {error: "not implemented"}, status: 500
+    @posts = @current_user.posts
+
+    render json: @posts, each_serializer: PostPreviewSerializer
   end
 
   private
