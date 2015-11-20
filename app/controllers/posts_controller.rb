@@ -1,6 +1,5 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :update, :destroy]
-  before_action :set_user, only: [:index, :create]
 
   # GET users/:user_id/posts
   # GET users/:user_id/posts.json
@@ -49,10 +48,6 @@ class PostsController < ApplicationController
   end
 
   private
-
-    def set_user
-      @user = User.find(params[:user_id])
-    end
 
     def set_post
       @post = Post.find(params[:id])
