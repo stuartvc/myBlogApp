@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.stuartvancampen.myblog.R;
+import com.stuartvancampen.myblog.post.NewPostDialog;
 import com.stuartvancampen.myblog.post.PostsActivity;
 import com.stuartvancampen.myblog.user.models.User;
 import com.stuartvancampen.myblog.user.models.UserPreview;
@@ -71,6 +72,18 @@ public class UserProfileFragment extends BaseFragment{
             }
         });
 
+        TextView createPostButton = (TextView) view.findViewById(R.id.create_post_button);
+        createPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNewPostDialog();
+            }
+        });
+
         return view;
+    }
+
+    private void showNewPostDialog() {
+        new NewPostDialog().show(getFragmentManager());
     }
 }

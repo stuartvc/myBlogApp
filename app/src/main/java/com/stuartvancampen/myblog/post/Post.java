@@ -1,8 +1,11 @@
 package com.stuartvancampen.myblog.post;
 
+import android.content.Context;
 import android.util.JsonReader;
 import android.util.JsonToken;
 
+import com.stuartvancampen.myblog.R;
+import com.stuartvancampen.myblog.session.Session;
 import com.stuartvancampen.myblog.util.MyObject;
 
 import org.json.JSONException;
@@ -36,6 +39,11 @@ public class Post extends MyObject {
         super(reader);
     }
 
+    public Post(String title, String body) {
+        mBody = body;
+        mTitle = title;
+    }
+
 
     @Override
     public void loadFromJson(JsonReader reader) throws IOException {
@@ -66,11 +74,11 @@ public class Post extends MyObject {
 
     @Override
     public JSONObject loadToJson() {
-        JSONObject user = new JSONObject();
-        addIfNotNull(user, TITLE, String.valueOf(mTitle));
-        addIfNotNull(user, BODY, String.valueOf(mBody));
-        addIfNotNull(user, ID, String.valueOf(mId));
-        return user;
+        JSONObject post = new JSONObject();
+        addIfNotNull(post, TITLE, String.valueOf(mTitle));
+        addIfNotNull(post, BODY, String.valueOf(mBody));
+        addIfNotNull(post, ID, String.valueOf(mId));
+        return post;
     }
 
     @Override
@@ -88,5 +96,9 @@ public class Post extends MyObject {
 
     public long getId() {
         return mId == null ? 0 : mId;
+    }
+
+    public static String getCreateUrl(Context context) {
+        return context.getString(R.string.base_url) + context.getString(R.string.posts_url);
     }
 }

@@ -61,7 +61,7 @@ public class ASyncLoginRequest extends AsyncTask<String, String, JsonReader> {
             conn.setRequestMethod("GET");
 
             // read the response
-            System.out.println("Response Code: " + conn.getResponseCode());
+            Log.d(TAG, "Response Code: " + conn.getResponseCode());
             InputStreamReader inReader = new InputStreamReader(conn.getInputStream());
             return new JsonReader(inReader);
 

@@ -127,7 +127,7 @@ public class MyLoader<T extends SerializableObject> {
                 conn.setRequestProperty("Authorization", authHeader);
 
                 // read the response
-                System.out.println("Response Code: " + conn.getResponseCode());
+                Log.d(TAG, "Response Code: " + conn.getResponseCode());
                 InputStreamReader inReader = new InputStreamReader(conn.getInputStream());
                 JsonReader reader = new JsonReader(inReader);
                 serializableObject = loadSerializableObject(mClazz, reader);

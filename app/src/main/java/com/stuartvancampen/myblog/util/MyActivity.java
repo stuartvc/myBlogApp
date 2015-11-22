@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,23 +15,28 @@ import android.view.MenuItem;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.stuartvancampen.myblog.background.FragmentAsyncTask;
+import com.stuartvancampen.myblog.background.FragmentAsyncTaskCallbacks;
+import com.stuartvancampen.myblog.background.TaskFragment;
 import com.stuartvancampen.myblog.login.LoginActivity;
 import com.stuartvancampen.myblog.R;
 import com.stuartvancampen.myblog.session.AuthPreferences;
-import com.stuartvancampen.myblog.session.Session;
 
 /**
  * Created by Stuart on 13/10/2015.
  */
-public abstract class MyActivity extends AppCompatActivity {
+public abstract class MyActivity extends AppCompatActivity implements FragmentAsyncTaskCallbacks {
 
-    public static final String FRAGMENT_TAG = "FRAGMENT_TAG";
+    private static final String FRAGMENT_TAG = "FRAGMENT_TAG";
+    private static final String TAG_TASK_FRAGMENT = "task_fragment_";
     private static final String TAG = MyActivity.class.getSimpleName();
+    private static final String EXTRA_NUMBER_OF_TASK_FRAGMENTS = "extra_number_of_task_fragments";
 
     private boolean mExternalLaunch;
     private RemoteJsonObjectLoader mRemoteLoader;
     private GoogleApiClient mClient;
     private boolean mAppIndexingStarted;
+    private int mFragmentTaskNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,8 @@ public abstract class MyActivity extends AppCompatActivity {
 
         setContentView(getLayoutId());
 
+        attachTaskFragments(savedInstanceState);
+
         insertFragment(mExternalLaunch);
 
         IntentFilter logoutIntent = new IntentFilter();
@@ -57,6 +63,7 @@ public abstract class MyActivity extends AppCompatActivity {
 
 
     }
+
 
     @Override
     protected void onStart() {
@@ -72,6 +79,31 @@ public abstract class MyActivity extends AppCompatActivity {
             stopAppIndex();
         }
         super.onStop();
+    }
+
+    public void startAsyncTask(FragmentAsyncTask task) {
+        FragmentManager fm = getFragmentManager();
+        TaskFragment fragment = new TaskFragment();
+        fm.beginTransaction().add(fragment, TAG_TASK_FRAGMENT + String.valueOf(mFragmentTaskNumber++)).commit();
+
+        fm.executePendingTransactions();
+        fragment.attachTask(task).startTask();
+    }
+
+    private void attachTaskFragments(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            mFragmentTaskNumber = 0;
+        }
+        else {
+            mFragmentTaskNumber = savedInstanceState.getInt(EXTRA_NUMBER_OF_TASK_FRAGMENTS, 0);
+
+            FragmentManager fm = getFragmentManager();
+            for (int i = 0; i < mFragmentTaskNumber; i++) {
+                TaskFragment fragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT + String.valueOf(i));
+
+                fm.beginTransaction().add(fragment, TAG_TASK_FRAGMENT).commit();
+            }
+        }
     }
 
     private void insertFragment(boolean showLoadingFragment) {
@@ -201,5 +233,25 @@ public abstract class MyActivity extends AppCompatActivity {
 
     protected Action buildViewAction() {
         return null;
+    }
+
+    @Override
+    public void onPreExecute() {
+
+    }
+
+    @Override
+    public void onProgressUpdate(int percent) {
+
+    }
+
+    @Override
+    public void onCancelled(){
+
+    }
+
+    @Override
+    public void onPostExecute(Object result){
+        Log.d(TAG, "onPostExecute");
     }
 }

@@ -33,8 +33,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="8dp"
             android:padding="8dp"
+            android:background="@color/login_button"
             android:text="@string/posts_button"
+            />
+
+        <TextView
+            android:id="@+id/create_post_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:background="@color/login_button"
+            android:text="@string/create_post_button"
             />
 
         <TextView

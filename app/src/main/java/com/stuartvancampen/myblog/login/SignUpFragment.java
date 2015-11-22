@@ -86,7 +86,7 @@ public class SignUpFragment extends BaseFragment {
                     wr.write( postBody.getBytes() );
 
                     // read the response
-                    System.out.println("Response Code: " + conn.getResponseCode());
+                    Log.d(TAG, "Response Code: " + conn.getResponseCode());
                     InputStreamReader inReader = new InputStreamReader(conn.getInputStream());
                     JsonReader reader = new JsonReader(inReader);
 
