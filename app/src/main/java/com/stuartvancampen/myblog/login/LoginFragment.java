@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stuartvancampen.myblog.R;
+import com.stuartvancampen.myblog.post.PostsActivity;
 import com.stuartvancampen.myblog.session.Session;
 import com.stuartvancampen.myblog.user.list.UsersActivity;
 import com.stuartvancampen.myblog.util.BaseFragment;
@@ -80,7 +81,7 @@ public class LoginFragment extends BaseFragment implements OnLoginCallback {
     }
 
     private void logInSuccess() {
-        getActivity().startActivity(UsersActivity.create(getActivity()));
+        getActivity().startActivity(PostsActivity.create(getActivity()));
         getActivity().finish();
     }
 

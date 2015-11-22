@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ public class PostViewActivity extends MyActivity {
 
     public static Intent create(Context context, Post post) {
         Intent startIntent = new Intent(context, PostViewActivity.class);
+        Log.d("POST", post.toString());
         startIntent.putExtra("post", post.toString());
         return startIntent;
     }

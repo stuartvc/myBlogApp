@@ -12,33 +12,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.stuartvancampen.myblog.R;
-import com.stuartvancampen.myblog.user.models.User;
 import com.stuartvancampen.myblog.util.MyAdapter;
 import com.stuartvancampen.myblog.util.MyFragment;
 import com.stuartvancampen.myblog.util.MyLoader;
 
 /**
- * Created by Stuart on 15/10/2015.
+ * Created by Stuart on 21/11/2015.
  */
 public class PostsFragment extends MyFragment<Post, PostList> {
 
     private static final String TAG = PostsFragment.class.getSimpleName();
-    private User mUser;
 
-    public static Fragment create(User user) {
-        Fragment frag = new PostsFragment();
-        Bundle args = new Bundle();
-        args.putString("user", user.toString());
-        frag.setArguments(args);
-        return frag;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Bundle args = getArguments();
-        mUser = new User(args.getString("user"));
+    public static Fragment create() {
+        return new PostsFragment();
     }
 
     @Nullable
@@ -47,7 +33,7 @@ public class PostsFragment extends MyFragment<Post, PostList> {
         View view = inflater.inflate(R.layout.post_list_fragment, container, false);
 
         TextView userName = (TextView) view.findViewById(R.id.user_name);
-        userName.setText(mUser.getName());
+        userName.setText("Recent Posts");
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.post_list_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -68,13 +54,12 @@ public class PostsFragment extends MyFragment<Post, PostList> {
 
     @Override
     public String getUrlPath() {
-        return getString(R.string.users_url) + String.valueOf(mUser.getId()) + "/" + getString(R.string.posts_url);
+        return getString(R.string.posts_url);
     }
 
     @Override
     public void OnItemClickListener(View view, int position) {
         Log.d(TAG, "onClick, position:" + position);
         getActivity().startActivity(PostViewActivity.create(getActivity(), ((PostsAdapter)mAdapter).getItem(position)));
-
     }
 }

@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.stuartvancampen.myblog.R;
+import com.stuartvancampen.myblog.user.models.User;
+import com.stuartvancampen.myblog.user.profile.UserProfileActivity;
 import com.stuartvancampen.myblog.util.MyAdapter;
 import com.stuartvancampen.myblog.util.MyFragment;
 
@@ -35,6 +37,17 @@ public class PostsAdapter extends MyAdapter<PostVH, Post, PostList> {
         if (post != null) {
             holder.mTitle.setText(post.getTitle());
             holder.mBody.setText(post.getBody());
+
+            final User user = post.getUser();
+            if (user != null) {
+                holder.mUser.setText(user.getName());
+                holder.mUser.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        UserProfileActivity.start(mFragment.getActivity(), user);
+                    }
+                });
+            }
         }
         else {
             Log.e(TAG, "could not find post at position " + String.valueOf(position));

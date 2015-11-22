@@ -42,6 +42,10 @@
             </intent-filter>
             </activity>
         <activity
+            android:name=".post.UsersPostsActivity"
+            android:label="@string/posts_activity_label"
+            />
+        <activity
             android:name=".post.PostsActivity"
             android:label="@string/posts_activity_label"
             />

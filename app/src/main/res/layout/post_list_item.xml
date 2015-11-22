@@ -9,15 +9,32 @@
 
     <TextView
         android:id="@+id/post_title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="4dp"/>
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/post_creator"
+        android:padding="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        />
 
     <TextView
         android:id="@+id/post_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/post_title"
-        android:padding="4dp"/>
+        android:padding="4dp"
+        />
+    
+    <TextView
+        android:id="@+id/post_creator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:maxLines="1"
+        android:ellipsize="end"
+        />
 
 </RelativeLayout>

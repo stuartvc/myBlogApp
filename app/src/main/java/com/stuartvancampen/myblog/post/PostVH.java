@@ -16,6 +16,7 @@ public class PostVH extends RecyclerView.ViewHolder implements View.OnClickListe
     private static final String TAG = PostVH.class.getSimpleName();
     public TextView mTitle;
     public TextView mBody;
+    public TextView mUser;
     private OnItemClickListener mOnItemClickListener;
 
 
@@ -23,6 +24,7 @@ public class PostVH extends RecyclerView.ViewHolder implements View.OnClickListe
         super(itemView);
         mTitle = (TextView) itemView.findViewById(R.id.post_title);
         mBody = (TextView) itemView.findViewById(R.id.post_body);
+        mUser = (TextView) itemView.findViewById(R.id.post_creator);
         itemView.setOnClickListener(this);
     }
 

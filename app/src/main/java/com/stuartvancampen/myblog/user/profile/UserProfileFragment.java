@@ -1,8 +1,6 @@
 package com.stuartvancampen.myblog.user.profile;
 
 import android.app.Fragment;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,11 +11,9 @@ import android.widget.TextView;
 
 import com.stuartvancampen.myblog.R;
 import com.stuartvancampen.myblog.post.NewPostDialog;
-import com.stuartvancampen.myblog.post.PostsActivity;
+import com.stuartvancampen.myblog.post.UsersPostsActivity;
 import com.stuartvancampen.myblog.user.models.User;
-import com.stuartvancampen.myblog.user.models.UserPreview;
 import com.stuartvancampen.myblog.util.BaseFragment;
-import com.stuartvancampen.myblog.util.MyLoader;
 
 /**
  * Created by Stuart on 14/10/2015.
@@ -68,7 +64,7 @@ public class UserProfileFragment extends BaseFragment{
         postsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().startActivity(PostsActivity.create(getActivity(), mUser));
+                getActivity().startActivity(UsersPostsActivity.create(getActivity(), mUser));
             }
         });
 

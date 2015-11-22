@@ -3,9 +3,11 @@ package com.stuartvancampen.myblog.post;
 import android.content.Context;
 import android.util.JsonReader;
 import android.util.JsonToken;
+import android.util.Log;
 
 import com.stuartvancampen.myblog.R;
 import com.stuartvancampen.myblog.session.Session;
+import com.stuartvancampen.myblog.user.models.User;
 import com.stuartvancampen.myblog.util.MyObject;
 
 import org.json.JSONException;
@@ -22,10 +24,12 @@ public class Post extends MyObject {
     private static final String BODY = "body";
     private static final String TITLE = "title";
     private static final String ID = "id";
+    private static final String USER = "user";
 
     private String mBody;
     private String mTitle;
     private Long mId;
+    private User mUser;
 
     @SuppressWarnings("unused")
     public Post() {
@@ -65,6 +69,10 @@ public class Post extends MyObject {
             else if (name.equals(ID)) {
                 mId = reader.nextLong();
             }
+            else if (name.equals(USER)) {
+                //Log.d("POST", reader.nextString());
+                mUser = new User(reader);
+            }
             else {
                 reader.skipValue();
             }
@@ -78,6 +86,7 @@ public class Post extends MyObject {
         addIfNotNull(post, TITLE, String.valueOf(mTitle));
         addIfNotNull(post, BODY, String.valueOf(mBody));
         addIfNotNull(post, ID, String.valueOf(mId));
+        addIfNotNull(post, USER, mUser);
         return post;
     }
 
@@ -96,6 +105,10 @@ public class Post extends MyObject {
 
     public long getId() {
         return mId == null ? 0 : mId;
+    }
+
+    public User getUser() {
+        return mUser;
     }
 
     public static String getCreateUrl(Context context) {
