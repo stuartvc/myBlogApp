@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.stuartvancampen.myblog.R;
 import com.stuartvancampen.myblog.post.Post;
@@ -47,6 +48,14 @@ public class CommentsFragment extends MyFragment<Comment, CommentList> {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.comment_list_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(mAdapter);
+
+        TextView newCommentButton = (TextView) view.findViewById(R.id.new_comment_button);
+        newCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new NewCommentDialog().show(getFragmentManager(), mPost);
+            }
+        });
 
         return view;
     }

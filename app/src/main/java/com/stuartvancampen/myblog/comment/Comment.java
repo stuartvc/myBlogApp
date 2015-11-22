@@ -1,8 +1,12 @@
 package com.stuartvancampen.myblog.comment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.util.JsonReader;
 import android.util.JsonToken;
 
+import com.stuartvancampen.myblog.R;
+import com.stuartvancampen.myblog.post.Post;
 import com.stuartvancampen.myblog.util.MyObject;
 
 import org.json.JSONObject;
@@ -13,7 +17,7 @@ import java.io.IOException;
  * Created by Stuart on 15/10/2015.
  */
 public class Comment extends MyObject {
-    private static final String ROOT_JSON = "post";
+    private static final String ROOT_JSON = "comment";
 
     private static final String BODY = "body";
     private static final String ID = "id";
@@ -27,7 +31,6 @@ public class Comment extends MyObject {
     public Comment() {
     }
 
-    @SuppressWarnings("unused")
     public Comment(String jsonString) {
         super(jsonString);
     }
@@ -36,6 +39,9 @@ public class Comment extends MyObject {
         super(reader);
     }
 
+    public Comment(String body, String userId) {
+        mBody = body;
+    }
 
     @Override
     public void loadFromJson(JsonReader reader) throws IOException {
@@ -80,5 +86,9 @@ public class Comment extends MyObject {
 
     public String getBody() {
         return mBody;
+    }
+
+    public static String getCreateUrl(Context context, Post post) {
+        return context.getString(R.string.base_url) + context.getString(R.string.posts_url) + String.valueOf(post.getId()) + "/" + context.getString(R.string.comments_url);
     }
 }

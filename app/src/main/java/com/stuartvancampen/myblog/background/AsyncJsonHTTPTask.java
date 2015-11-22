@@ -61,7 +61,7 @@ public class AsyncJsonHTTPTask<Result extends SerializableObject> extends Fragme
         Result serializableObject = null;
         try {
             URL url = new URL(mUrl);
-            Log.d("LoginFragment", "loading url:" + mUrl);
+            Log.d(TAG, "loading url:" + mUrl);
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setRequestMethod(mHttpVerb.name());
             conn.setRequestProperty("Content-Type", "application/json");

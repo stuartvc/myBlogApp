@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.stuartvancampen.myblog.R;
 import com.stuartvancampen.myblog.comment.CommentsFragment;
+import com.stuartvancampen.myblog.user.models.User;
 import com.stuartvancampen.myblog.util.MyActivity;
 
 /**
@@ -32,11 +33,16 @@ public class PostViewActivity extends MyActivity {
         super.onCreate(savedInstanceState);
 
         FrameLayout frameLayout = (FrameLayout) findViewById(R.id.header_container);
-        View header = getLayoutInflater().inflate(R.layout.post_list_item, null);
+        View header = getLayoutInflater().inflate(R.layout.post_list_item, null, false);
         TextView title = (TextView) header.findViewById(R.id.post_title);
         title.setText(mPost.getTitle());
         TextView body = (TextView) header.findViewById(R.id.post_body);
         body.setText(mPost.getBody());
+        User user = mPost.getUser();
+        if (user != null) {
+            TextView creator = (TextView) header.findViewById(R.id.post_creator);
+            creator.setText(user.getName());
+        }
         frameLayout.addView(header);
     }
 

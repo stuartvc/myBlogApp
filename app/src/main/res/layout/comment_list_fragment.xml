@@ -6,7 +6,18 @@
         android:id="@+id/comment_list_view"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
+        android:layout_above="@+id/new_comment_button"
+        android:layout_alignWithParentIfMissing="true"
         android:background="@color/white"
+        />
+
+    <TextView
+        android:id="@+id/new_comment_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="8dp"
+        android:text="@string/new_comment"
         />
 
 </RelativeLayout>

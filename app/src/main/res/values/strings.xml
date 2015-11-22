@@ -29,4 +29,7 @@
     <string name="create_post_button">New Post</string>
     <string name="post">Post</string>
     <string name="cancel">Cancel</string>
+    <string name="new_comment">New Comment</string>
+    <string name="comment">Comment</string>
+    <string name="create_comment_button">Create Comment</string>
 </resources>
