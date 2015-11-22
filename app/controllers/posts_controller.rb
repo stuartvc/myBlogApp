@@ -1,12 +1,12 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :update, :destroy]
 
-  # GET users/:user_id/posts
-  # GET users/:user_id/posts.json
+  # GET /posts
+  # GET /posts.json
   def index
-    @posts = @current_user.posts
-
-    render json: @posts, each_serializer: PostPreviewSerializer
+    posts = Post.last(5).reverse
+    
+    render json: posts, each_serializer: PostPreviewSerializer
   end
 
   # GET /posts/1
@@ -15,8 +15,8 @@ class PostsController < ApplicationController
     render json: @post, serializer: PostSerializer
   end
 
-  # POST users/:user_id/posts
-  # POST users/:user_id/posts.json
+  # POST /posts
+  # POST /posts.json
   def create
     @post = Post.new(post_params.merge(:user_id => @current_user.id))
 
@@ -42,11 +42,18 @@ class PostsController < ApplicationController
   # DELETE /posts/1
   # DELETE /posts/1.json
   def destroy
-    @post.destroy
+    if @current_user.id == @post.user_id
+      @post.destroy
 
-    head :no_content
+      head :no_content
+    else
+      render json: { error: 'Not Authorised'}, status: 401
+    end
+    
   end
 
+  # GET /users/:user_id/posts
+  # GET /users/:user_id/posts.json
   def users_posts
     @posts = @current_user.posts
 
@@ -60,6 +67,6 @@ class PostsController < ApplicationController
     end
 
     def post_params
-      params.require(:post).permit(:title, :body, :user_id)
+      params.require(:post).permit(:title, :body)
     end
 end
