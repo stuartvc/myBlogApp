@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   get :login, controller: 'application'
   get :loginVerification, controller: 'application'
+  get :awsVerification, controller: 'application'
 
   resource :users, except: [:new, :edit, :show]
 

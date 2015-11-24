@@ -20,6 +20,19 @@ class ApplicationController < ActionController::API
 		render json: { login: 'success', :user => @current_user.as_json(:only => [:id, :name, :email])}, status: 200
 	end
 
+	def awsVerification
+		s3Client = Aws::S3::Client.new
+		resp = s3Client.get_open_id_token_for_developer_identity({
+			identity_pool_id: "us-east-1:31d8dd8e-2283-4476-9eae-3dfdc271af50", 
+			identity_id: @current_user.id,
+			logins: { # required
+    			"IdentityProviderName" => "login.stuartvancampen.myblog"
+  			}
+  		})
+  		render json: { identity_id: resp.identity_id, token: resp.token}
+
+	end
+
 	private
 
 

@@ -7,6 +7,8 @@ gem 'rails-api'
 
 gem 'rollbar', '~> 2.4.0'
 
+gem 'aws-sdk', '~> 2'
+
 gem 'spring', :group => :development
 
 group :development, :test do
