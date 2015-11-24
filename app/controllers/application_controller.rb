@@ -26,8 +26,7 @@ class ApplicationController < ActionController::API
 			identity_pool_id: "us-east-1:31d8dd8e-2283-4476-9eae-3dfdc271af50", 
 			identity_id: "us-east-1:" + @current_user.id.to_s,
 			logins: {
-    			"IdentityProviderName" => "login.stuartvancampen.myblog",
-    			"login.stuartvancampen.myblog" => "login.stuartvancampen.myblog"
+    			"login.stuartvancampen.myblog" => @current_user.id.to_s + ":" + @current_user.email
   			}
   		})
   		render json: { identity_id: resp.identity_id, token: resp.token}
