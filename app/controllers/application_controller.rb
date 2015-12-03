@@ -24,7 +24,6 @@ class ApplicationController < ActionController::API
 		s3Client = Aws::CognitoIdentity::Client.new
 		resp = s3Client.get_open_id_token_for_developer_identity({
 			identity_pool_id: "us-east-1:31d8dd8e-2283-4476-9eae-3dfdc271af50", 
-			#identity_id: "us-east-1:" + @current_user.id.to_s,
 			logins: {
     			"login.stuartvancampen.myblog" => @current_user.id.to_s + ":" + @current_user.email
   			}
